@@ -232,8 +232,9 @@ class TqBacktest(object):
                     })
             if self._diffs:
                 # 发送数据集中添加 backtest 字段，开始时间、结束时间、当前时间，表示当前行情推进是由 backtest 推进
+                # 把时间放在 _diffs 里的第一个，因为在遇到需要结算时，可以先处理结算，再处理行情
                 if self._is_first_send:
-                    self._diffs.append({
+                    self._diffs.insert(0, {
                         "_tqsdk_backtest": {
                             "start_dt": self._start_dt,
                             "current_dt": self._current_dt,
@@ -242,7 +243,7 @@ class TqBacktest(object):
                     })
                     self._is_first_send = False
                 else:
-                    self._diffs.append({
+                    self._diffs.insert(0, {
                         "_tqsdk_backtest": {
                             "current_dt": self._current_dt
                         }
